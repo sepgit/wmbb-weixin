@@ -16,8 +16,8 @@ export function getCookie(cname){
 }
 
 export function Getwxtoken (){
-  let wxtoken = getCookie("username");
-  //let wxtoken = 'otCoBt8-YnV2KFoyOFmAkQu5xCPo';
+  //let wxtoken = getCookie("username");
+  let wxtoken = 'otCoBt8-YnV2KFoyOFmAkQu5xCPo';
   return wxtoken;
 }
 

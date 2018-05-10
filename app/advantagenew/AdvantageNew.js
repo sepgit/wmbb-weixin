@@ -111,7 +111,7 @@ class AdvantageNew extends Component {
         this.renderLines = this.renderLines.bind(this);
         this.getlineID = this.getlineID.bind(this);
         this.test = this.test.bind(this);
-        
+
         this.GetspePortID = this.GetspePortID.bind(this);
         this.renderSPort = this.renderSPort.bind(this);
         this.SpaceDepaPortonClick = this.SpaceDepaPortonClick.bind(this);
@@ -333,7 +333,7 @@ class AdvantageNew extends Component {
             });
         }
     }
-    
+
     ServonClick() {
         this.setState({
             backto: 'OrdinaryOrgin',
@@ -771,6 +771,7 @@ class AdvantageNew extends Component {
         let url = 'api/advas/?userName=' + BinduserName + '&wxtoken=' + wxtoken + '&serv=' + serv + '&carr=' + carr
             + '&depaPort=' + depaPort + '&destPort=[' + destPort + ']&user=' + user + '&labe=' + labe + '&inLabe=' + inLabe + '&booking=' + booking + '&freight=' + freight
             + '&qing=' + qing + '&shipSpace=' + shipSpace + '&isDest=true';
+
         if (serv == 0) {
             this.GetMsg(2, '服务类型不能为空', 'OrdinaryDest');  //提示类型错误,返回界面0
         } else if (carr == 0) {
@@ -792,14 +793,14 @@ class AdvantageNew extends Component {
         let serv = this.state.serv;
 
         let depaPort = this.state.port;;
-        
+
         let user = this.state.reuser;
         let labe = this.state.labeOutside;
         let inLabe = this.state.labeInside;
-       
+
         let url = 'api/advas/?userName=' + BinduserName + '&wxtoken=' + wxtoken + '&serv=' + serv +
             '&depaPort=' + depaPort + '&user=' + user + '&labe=' + labe + '&inLabe=' + inLabe + '&isSpec=true';
-            console.log(url);
+        console.log(url);
         if (serv == 0) {
             this.GetMsg(2, '服务类型不能为空', 'Special');  //提示类型错误,返回界面0
         } else if (depaPort == 0) {
@@ -1012,6 +1013,19 @@ class AdvantageNew extends Component {
                     this.renderReList() : undefined
             }
             <div className="thestep">第四步 : </div>
+
+            <div className="ord_label">
+                {
+                    this.state.depaName == '' ?
+                        <div className="labelChoose">
+                            <span className="red"> * </span><SkipLabel caption={'起运地'} text={'请输入起运地并选择'} SelfonClick={this.DepaPortonClick} />
+
+                        </div> :
+                        <div className="labelChoose">
+                            <span className="red"> * </span><SkipLabel caption={'起运地'} text={this.state.depaName} SelfonClick={this.DepaPortonClick} />
+                        </div>
+                }
+            </div>
             <div className="ord_label">
                 {
                     this.state.clickLines == '' ?
@@ -1029,19 +1043,6 @@ class AdvantageNew extends Component {
                         </div>
                 }
             </div>
-            <div className="ord_label">
-                {
-                    this.state.depaName == '' ?
-                        <div className="labelChoose">
-                            <span className="red"> * </span><SkipLabel caption={'起运地'} text={'请输入起运地并选择'} SelfonClick={this.DepaPortonClick} />
-
-                        </div> :
-                        <div className="labelChoose">
-                            <span className="red"> * </span><SkipLabel caption={'起运地'} text={this.state.depaName} SelfonClick={this.DepaPortonClick} />
-                        </div>
-                }
-            </div>
-
 
             <div className="thestep">其他 : </div>
             <ul className="otherRemarks">
@@ -1052,11 +1053,11 @@ class AdvantageNew extends Component {
                             <SkipLabel caption={'优势明细'} text={this.state.advadetail} SelfonClick={this.advaDetailonClick} />
                     }
                 </li>
-                <li className="ord_label markers"><StrInput caption={'内标注'} promptProp={'请输入备注信息'} updateStateProp={this.Getlabe} />
+                <li className="ord_label markers"><StrInput caption={'内标注'} promptProp={'请输入备注信息'} updateStateProp={this.GetlabeInside} />
 
                 </li>
                 <li><div className="label_tip">内标注：内容为公司内用户所见</div></li>
-                <li className="ord_label markers"><StrInput caption={'外标注'} promptProp={'请输入备注信息'} updateStateProp={this.Getlabe} />
+                <li className="ord_label markers"><StrInput caption={'外标注'} promptProp={'请输入备注信息'} updateStateProp={this.GetlabeOutside} />
 
 
                 </li>
@@ -1242,8 +1243,9 @@ class AdvantageNew extends Component {
                         <div className="ordinary_page">
                             <BackT tit='请选择添加优势的类型' backonClick={this.backtoAll}></BackT>
                             <ul>
-                                <li className="ordinary_page_orgin" onClick={this.OrdinaryOrgin}><a href="javascript:void(0)">起运地-<span>按航线选择</span></a></li>
                                 <li className="ordinary_page_destination" onClick={this.toOrdinaryDestination}><a href="javascript:void(0)">目的地-<span>按航线选择</span></a></li>
+                                <li className="ordinary_page_orgin" onClick={this.OrdinaryOrgin}><a href="javascript:void(0)">起运地-<span>按航线选择</span></a></li>
+
                             </ul>
                         </div> : undefined
                 }
