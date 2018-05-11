@@ -65,4 +65,9 @@ body{max-width:64rem;min-width:26rem;margin: 0 auto;background: #ccc;height: 100
 .page_line_txt{line-height: 2rem;color: #f00;font-size: 1.5rem;padding-left: 1rem;}
 
 
+.rela{position: relative;}
+.red{font-size:2rem;height:2rem;line-height: 2rem;color:#f00;position: absolute;top:50%;left:0.5rem;margin-top:-1rem}
+
+.page_prompt{padding-left: 1rem;margin-top:1rem}
+.page_prompt span{color:#f00}
 

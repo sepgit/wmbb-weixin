@@ -223,6 +223,7 @@ class AuthenticationIndex extends Component {
   render() {
     return (
       <div>
+        <div className="title_fixed_space"></div>
         {
           this.state.Pagestatus=='Rights'?
             this.renderRights():undefined

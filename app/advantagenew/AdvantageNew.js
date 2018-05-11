@@ -579,7 +579,7 @@ class AdvantageNew extends Component {
     }
     renderSPort() {
         return <div>
-            <BackT tit="口岸"></BackT>
+            <BackT tit="口岸"  backonClick={this.back}></BackT>
             <div className="weui-cells">
                 <ADPortsList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} serv={this.state.serv} GetSelectID={this.GetspePortID} backprop={this.back} />
             </div>
@@ -597,7 +597,7 @@ class AdvantageNew extends Component {
     //口岸
     renderPortSelect() {
         return <div>
-            <BackT tit="口岸"></BackT>
+            <BackT tit="口岸"  backonClick={this.back}></BackT>
             <div className="weui-cells">
                 <ADPortsList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} serv={this.state.ServerPageServ} GetSelectID={this.GetPortID} backprop={this.back} />
             </div>
@@ -647,16 +647,28 @@ class AdvantageNew extends Component {
     }
     //航线选择
     chooseLines() {
+        
         this.setState({
             backto: this.state.Pagestatus
         })
         let BinduserName = this.state.BinduserName;
         let wxtoken = this.state.wxtoken;
-        let url = 'api/lines/?userName=' + BinduserName + '&wxtoken=' + wxtoken + '&rowCount=0';
-        getDataDetail(url, this.linesName)
-        this.setState({
-            Pagestatus: 'lines',
-        })
+        let serverNum = this.state.serv;
+        console.log(serverNum);
+        if (serverNum == 3) {
+            let url = 'api/lines/?userName=' + BinduserName + '&wxtoken=' + wxtoken + '&rowCount=0&lineType=2';
+            getDataDetail(url, this.linesName)
+            this.setState({
+                Pagestatus: 'lines',
+            })
+        }else{
+            let url = 'api/lines/?userName=' + BinduserName + '&wxtoken=' + wxtoken + '&rowCount=0&lineType=1';
+            getDataDetail(url, this.linesName)
+            this.setState({
+                Pagestatus: 'lines',
+            })
+        }
+        
     }
     linesName(value) {
         console.log(value);
@@ -734,7 +746,8 @@ class AdvantageNew extends Component {
         let qing = this.state.qing;
         let shipSpace = this.state.shipSpace;
         // console.log(this.state.reuser);
-        // console.log(user);
+        
+        console.log('user');
         let url = 'api/advas/?userName=' + BinduserName + '&wxtoken=' + wxtoken + '&serv=' + serv + '&carr=' + carr
             + '&depaPort=[' + depaPort + ']&destPort=' + destPort + '&user=' + user + '&labe=' + labe + '&inLabe=' + inLabe + '&booking=' + booking + '&freight=' + freight
             + '&qing=' + qing + '&shipSpace=' + shipSpace + '&isDepa=true';
@@ -748,6 +761,7 @@ class AdvantageNew extends Component {
         } else if (destPort == 0) {
             this.GetMsg(2, '目的地不能为空', 'OrdinaryOrgin');  //提示类型错误,返回界面0
         } else {
+            console.log('起运地提交');
             postYJData(url, [], this.callbackOrgin)
         }
     }
@@ -768,6 +782,7 @@ class AdvantageNew extends Component {
         let freight = this.state.freight;
         let qing = this.state.qing;
         let shipSpace = this.state.shipSpace;
+        
         let url = 'api/advas/?userName=' + BinduserName + '&wxtoken=' + wxtoken + '&serv=' + serv + '&carr=' + carr
             + '&depaPort=' + depaPort + '&destPort=[' + destPort + ']&user=' + user + '&labe=' + labe + '&inLabe=' + inLabe + '&booking=' + booking + '&freight=' + freight
             + '&qing=' + qing + '&shipSpace=' + shipSpace + '&isDest=true';
@@ -797,7 +812,7 @@ class AdvantageNew extends Component {
         let user = this.state.reuser;
         let labe = this.state.labeOutside;
         let inLabe = this.state.labeInside;
-
+        
         let url = 'api/advas/?userName=' + BinduserName + '&wxtoken=' + wxtoken + '&serv=' + serv +
             '&depaPort=' + depaPort + '&user=' + user + '&labe=' + labe + '&inLabe=' + inLabe + '&isSpec=true';
         console.log(url);
@@ -819,7 +834,7 @@ class AdvantageNew extends Component {
         let user = this.state.reuser;
         let labe = this.state.labeOutside;
         let inLabe = this.state.labeInside;
-
+        
         let url = 'api/conts/?userName=' + BinduserName + '&wxtoken=' + wxtoken + '&serv=' + serv + '&servOpti=' + servOpti +
             '&port=' + port + '&user=' + user + '&labe=' + labe + '&inLabe=' + inLabe;
         if (serv == 0) {
@@ -1234,6 +1249,11 @@ class AdvantageNew extends Component {
                                 <li className="ordinary" onClick={this.toOrdinary}><a href="javascript:void(0)">普通运价优势</a></li>
                                 <li className="special" onClick={this.toSpecial}><a href="javascript:void(0)">特种货运价优势</a></li>
                                 <li className="service" onClick={this.toService}><a href="javascript:void(0)">服务优势</a></li>
+                            </ul>
+                            <ul className="all_tips">
+                                <li>1. 优势将在物贸百度展示厅查询显示</li>
+                                <li>2. 分类登记优势,方便整理、查询、统计优势</li>
+                                <li>3. 优势中的接收人,是平台上的联系人</li>
                             </ul>
                         </div> : undefined
                 }

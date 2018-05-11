@@ -398,8 +398,6 @@ export function postVip(userName,wxtoken, rData){
 
 
 export function postYJData(url, params, rData) {
-
-
   let urls = '', bodys = '', urlarr = [];
   if (params) {
     urlarr = url.split('?')

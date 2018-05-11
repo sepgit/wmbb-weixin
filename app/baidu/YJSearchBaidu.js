@@ -560,6 +560,7 @@ class YJSearchBaidu extends Component {
   render() {
     return (
       <div>
+        
         {
           this.state.Pagestatus=='Main'?
             this.renderSearch():undefined

@@ -71,6 +71,7 @@ class Baidu extends Component {
       <HeadLine Caption={'物贸百度'}/>
       <div className="page">
         <Title SML={1} Titletext={'根据您需要的选择对应的类型'}/>
+        
         <div className="weui-flex">
           <div className="weui-flex__item"><div className="blue_panel"><a className="Text_title" href="javascript:;" onClick={this.ToYJ}>普通货优势搜索</a></div></div>
           <div className="blue_panel"><img className="panel_Coin" src={this.state.doorpic}/></div>
@@ -118,6 +119,7 @@ class Baidu extends Component {
   render() {
     return (
       <div>
+        <div className="title_fixed_space"></div>
         {
           this.state.Pagestatus=='Main'?
             this.renderMain():undefined

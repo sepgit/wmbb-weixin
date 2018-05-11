@@ -132,6 +132,7 @@ class Binding extends Component {
   render() {
     return(
       <div>
+        <div className="title_fixed_space"></div>
         {
           this.state.Pagestatus=='Main'?
             this.renderMain():undefined

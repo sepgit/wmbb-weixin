@@ -338,3 +338,6 @@ body {
   background: #fff;
   margin: 0.25rem;
 }
+
+.all_tips{width:29.16667rem;margin: 0 auto}
+.all_tips li{height:3rem;line-height: 3rem;font-size: 1.5rem;color:#666}

@@ -6,8 +6,8 @@ import AuthenticationIndex from './authentication/AuthenticationIndex.js';   //è
 import Contact from './contact/Contact.js';
 import Introduce from './introduce/Introduce.js';
 import AuthComps from './authcomps/AuthComps.js';
-import Addsuppliers from './addsuppliers/Addsuppliers.js';
-import AdvantageNew from './advantagenew/AdvantageNew.js';
+import Addsuppliers from './addsuppliers/addsuppliers.js';
+import AdvantageNew from './advantagenew/advantageNew.js';
 
 import {Getwxtoken,getCheckbind} from './DataInterface.js';
 
@@ -91,7 +91,7 @@ class Index extends Component {
             <AuthComps />:undefined
         }
         {
-          this.state.page=='addsuppliersss'?
+          this.state.page=='addsuppliers'?
             <Addsuppliers />:undefined
         }
         {

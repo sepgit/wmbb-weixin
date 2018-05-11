@@ -16,7 +16,7 @@ import SkipLabel from '../component/SkipLabel.js';
 import StrInput from '../component/StrInput.js';
 import ServList from '../advancedcomponent/ServList.js';
 import PortsList from '../advancedcomponent/PortsList.js';
-
+import sSkipLabel from './sSkipLabel.js';
 
 class Addsuppliers extends Component {
 
@@ -152,6 +152,10 @@ class Addsuppliers extends Component {
             alert('请输入正确的名称')
             return;
         }
+        this.setState({
+            userArr: [],
+            compArr: []
+        })
         let BinduserName = this.state.BinduserName;
         let wxtoken = this.state.wxtoken;
         let compAlia = this.state.value;
@@ -185,8 +189,8 @@ class Addsuppliers extends Component {
                 theUserArr.push(datas)
             }
         }
-        console.log(theCompArr);
-        console.log(theUserArr);
+        // console.log(theCompArr);
+        // console.log(theUserArr);
         this.setState({
             userArr: theUserArr,
             compArr: theCompArr
@@ -227,7 +231,8 @@ class Addsuppliers extends Component {
     }
     renderEach() {
         return this.state.userArr.map(value => {
-            return <EachCompany key={value.length} ipgp={value.compAlia} name={value.name} userAcco={value.userAcco} chooseClick={this.toDetalied} user={value.user}></EachCompany>
+            
+            return <EachCompany key={value.length} ipgp={value.compAlia} name={value.name} userAcco={value.userAcco} chooseClick={this.toDetalied} user={value.user} wxtoken={this.state.wxtoken} BinduserName={this.state.BinduserName}></EachCompany>
         })
     }
 
@@ -235,9 +240,10 @@ class Addsuppliers extends Component {
         return this.state.compArr.map(value => {
             let id = value.comp;
             let userID = "userID" + id;
+            
             return <div>
 
-                <ChooseList compAlia={value.compAlia} compID={value.comp} values={value} clickIDs={this.state.showID} toDetalied={this.toDetalied}></ChooseList>
+                <ChooseList compAlia={value.compAlia} compID={value.comp} values={value} clickIDs={this.state.showID} toDetalied={this.toDetalied} wxtoken={this.state.wxtoken} BinduserName={this.state.BinduserName}></ChooseList>
 
             </div>
         })
@@ -255,14 +261,14 @@ class Addsuppliers extends Component {
 
     }
     chooseChildMsg(val) {
-        console.log(val);
+        
         this.setState({
             userlist: val
         })
 
     }
     showClickDOM() {
-        console.log();
+        
         if (this.state.userlist != 1) {
             return this.state.userlist.map(value => {
                 return <EachCompany key={value.user} ipgp={value.compAlia} name={value.name} userAcco={value.userAcco} chooseClick={this.toDetalied} user={value.user}></EachCompany>
@@ -565,19 +571,30 @@ class Addsuppliers extends Component {
                                 <div className="page_line"></div>
                                 <div className="page_line_tit">供应商归类</div>
                                 <div className="page_line_txt">您归类后，以后该供应商将在您（公司）询盘或者咨询时候，在收件人列表里自动出现，供您选择使用。</div>
+                                
+                                <div className="page_prompt">标记 <span> * </span> 为必填</div>
+                                
                                 <div className="threeLabel">
                                     {
                                         this.state.servName == '' ?
-                                            <SkipLabel caption={'服务类型'} text={'请选择类型'} SelfonClick={this.ServonClick} /> :
-                                            <SkipLabel caption={'服务类型'} text={this.state.servName} SelfonClick={this.ServonClick} />
+                                            <div className="rela">
+                                                <SkipLabel caption={'服务类型'} text={'请选择类型'} SelfonClick={this.ServonClick} /> 
+                                                <span className="red">*</span> 
+                                                </div> :
+                                            <div className="rela">
+                                                <SkipLabel caption={'服务类型'} text={this.state.servName} SelfonClick={this.ServonClick} />
+                                                <span className="red">*</span> 
+                                            </div>
                                     }
                                 </div>
 
                                 <div className="threeLabel">
                                     {
                                         this.state.portName == '' ?
-                                            <SkipLabel caption={'口岸'} text={'请输入口岸并选择'} SelfonClick={this.PortonClick} /> :
-                                            <SkipLabel caption={'口岸'} text={this.state.portName} SelfonClick={this.PortonClick} />
+                                        <div className="rela"><SkipLabel caption={'口岸'} text={'请输入口岸并选择'} SelfonClick={this.PortonClick} /><span className="red">*</span> 
+                                        </div> :
+                                            <div className="rela"><SkipLabel caption={'口岸'} text={this.state.portName} SelfonClick={this.PortonClick} /><span className="red">*</span> 
+                                            </div> 
                                     }
                                 </div>
                                 <div className="threeLabel">

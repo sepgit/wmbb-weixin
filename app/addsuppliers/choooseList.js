@@ -35,6 +35,7 @@ class ChooseList extends Component {
             dpcompName: '',
             dpinduName: '',
             dpmobi: '',
+            vip:0
         }
     }
 
@@ -76,17 +77,23 @@ class ChooseList extends Component {
         getDataList(url, [], this.backList);
     }
     backList(val) {
-
+        console.log(val);
         this.setState({
             userlist: val
         })
+        if (val.length>0) {
+            let users = val[0]
+            this.setState({
+                vip:users.userVip
+            })
+        }
     }
 
     showClickDOM() {
 
         if (this.state.userlist.length >= 1) {
             return this.state.userlist.map(value => {
-                return <EachCompany key={value.user} ipgp={value.compAlia} name={value.name} userAcco={value.userAcco} chooseClick={this.props.toDetalied} user={value.user}></EachCompany>
+                return <EachCompany key={value.user} ipgp={value.compAlia} name={value.name} userAcco={value.userAcco} chooseClick={this.props.toDetalied} user={value.user} wxtoken={this.state.wxtoken} BinduserName={this.state.BinduserName}></EachCompany>
             })
         } else {
             return undefined
@@ -137,7 +144,11 @@ class ChooseList extends Component {
                 <div className="companyListNav" >
                     {/* CLN = companyListNav */}
                     <div className="CLN_compAlia">
-                        <img src = {vip}  alt="会员" className="CLN_compAlia_lists CLN_compAlia_img_vip" />
+                        {
+                            this.state.vip == 1?
+                            <img src = {vip}  alt="会员" className="CLN_compAlia_lists CLN_compAlia_img_vip" />:undefined
+                        }
+                        
                         <div className="CLN_compAlia_con CLN_compAlia_lists">{this.props.compAlia}</div>
                         <div className="CLN_compAlia_ID CLN_compAlia_lists">{this.props.compID}</div>
                         <div className="CLN_compAlia_arrow CLN_compAlia_lists" onClick={this.testFun}></div>
