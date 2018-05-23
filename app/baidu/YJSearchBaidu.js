@@ -12,12 +12,10 @@ import DetailList from './DetailList.js';
 import BaiduList from './BaiduList.js';
 import AddProv from './AddProv.js';
 import BaiduItemDetail from './BaiduItemDetail.js';
-import Evaluate from './Evaluate.js';
 import Title from  '../component/Title.js';
-import BackTitle from '../component/BackTitle.js';
-import Footer from '../component/Footer.js';
+import Rpath from '../Rpath.js';
 
-import {getDataList,getCheckbind,Getwxtoken,getdistDataList,getDataJson} from '../DataInterface.js';
+import {getDataList,getCheckbind,Getwxtoken} from '../DataInterface.js';
 
 class YJSearchBaidu extends Component {
   constructor(props) {
@@ -33,7 +31,6 @@ class YJSearchBaidu extends Component {
     this.renderDataDetail=this.renderDataDetail.bind(this);           //数据明细
     this.renderMsg=this.renderMsg.bind(this);                         //返回
     this.renderAddProv=this.renderAddProv.bind(this);                 //添加供应商界面
-    this.renderEvaluate=this.renderEvaluate.bind(this);                 //评价
 
     this.ServonClick=this.ServonClick.bind(this);
     this.DepaPortonClick=this.DepaPortonClick.bind(this);       //跳转到起运地选择框
@@ -42,7 +39,6 @@ class YJSearchBaidu extends Component {
     this.advaDetailonClick=this.advaDetailonClick.bind(this);         //跳转到优势明细选择框
     this.GetDataDetail=this.GetDataDetail.bind(this);         //转到明细界面
     this.AddProv=this.AddProv.bind(this);                     //转到添加供应商界面
-    this.GetEvaluate=this.GetEvaluate.bind(this);             //转到评分界面
 
     //this.GetDataList=this.GetDataList.bind(this);
     this.GetservID=this.GetservID.bind(this);
@@ -59,16 +55,12 @@ class YJSearchBaidu extends Component {
     this.ResetData=this.ResetData.bind(this);                       //重置选择项
     this.GetMsg=this.GetMsg.bind(this);
     this.back=this.back.bind(this);
-    this.ToDetail=this.ToDetail.bind(this);
-    this.ToList=this.ToList.bind(this);
-    this.ToMain=this.ToMain.bind(this);
-    this.GetbaiduVip = this.GetbaiduVip.bind(this);
-    this.GetRbaiduVip = this.GetRbaiduVip.bind(this);
 
     this.state = {
       user:0,
       BinduserName:'',
       wxtoken:'',
+      Pagestatus:'Main',
       serv:0,
       servName:'',
       servList:[],    //修改后移除
@@ -87,15 +79,8 @@ class YJSearchBaidu extends Component {
       SelectID:0,
       Selectuser:0 ,    //查看用户明细id
       MsgType:0,
-      MsgFoot:'',
       backto:'',
-      SearchCondition:[],
-      scor:0,
-      winRepl:0,
-      allRepl:0,
-      scors:[],
-      baiduvip:0,
-      Pagestatus:'Main',
+      SearchCondition:[]
     }
   }
 
@@ -110,30 +95,10 @@ class YJSearchBaidu extends Component {
   getBuserName(value){
     if (!value.err) {
       let userJson = value.user;
-      let wxtoken = this.state.wxtoken;
       this.setState({
         BinduserName: userJson.userAcco,
         user:userJson.user
       });
-      this.GetbaiduVip(userJson.userAcco,wxtoken);
-    }
-  }
-
-  GetbaiduVip(userName,wxtoken){
-    let url = 'api/disps/?userName='+userName+'&wxtoken='+wxtoken+'&isCheck=true';
-    getDataJson(url,[],this.GetRbaiduVip);
-  }
-
-  GetRbaiduVip(value){
-    let dispsJson =value;
-    if(!dispsJson.err){
-      this.setState({
-        baiduvip:1
-      })
-    } else {
-      this.setState({
-        baiduvip:0
-      })
     }
   }
 
@@ -181,7 +146,7 @@ class YJSearchBaidu extends Component {
       this.setState({
         SearchCondition:sites
       });
-      getdistDataList(url,[],this.GetRSearchDataList);
+      getDataList(url,[],this.GetRSearchDataList);
     }
   }
 
@@ -213,36 +178,26 @@ class YJSearchBaidu extends Component {
     })
   }
 
-  GetRSearchDataList(value,resultAll){
-    console.log("value="+value.length);
-    console.log("resultAll="+resultAll);
+  GetRSearchDataList(value){
     if (value.length>0){
       this.setState({
         SeachDataList:value,
         Pagestatus:'List',
         backto:'Main'
       })
-    } else if (resultAll>0)
-    {
-      this.setState({
-        MsgType:2,      //错误标识
-        Pagestatus: 'Msg',
-        Msg:'请联系平台客服开通物贸百度查看权限，平台客服联系方式 手机（微信）：13780008543',
-        backto:'Main'
-      });
-    } else{
+    } else  {
       this.setState({
         MsgType:2,      //错误标识
         Pagestatus: 'Msg',
         Msg:'该条件无可查询数据',
-        backto:'Main',
-        MsgFoot:'Y'
+        backto:'Main'
       });
     }
   }
 
   GetDataDetail(value){
     let a = this.state.Pagestatus;
+    console.log("value="+value);
     this.setState({
       SelectID:value,
       Pagestatus:'Detail',
@@ -370,44 +325,14 @@ class YJSearchBaidu extends Component {
     });
   }
 
-  GetEvaluate(scor,winRepl,allRepl,scors){
-    this.setState({
-      Pagestatus:'Eva',
-      scor:scor,
-      winRepl:winRepl,
-      allRepl:allRepl,
-      scors:scors,
-    });
-  }
-
   back(){
     this.setState({
-      Pagestatus:this.state.backto,
-      MsgFoot:''
-    });
-  }
-
-  ToDetail(){
-    this.setState({
-      Pagestatus:'Detail'
-    });
-  }
-
-  ToList(){
-    this.setState({
-      Pagestatus:'List'
-    });
-  }
-
-  ToMain(){
-    this.setState({
-      Pagestatus:'Main'
+      Pagestatus:this.state.backto
     });
   }
 
   renderSearch(){
     return  <div>
-      <BackTitle backonClick={this.props.ToMain}/>
       <Title Titletext={'普通运价类型'}/>
       <div className="weui-cells">
         {
@@ -442,23 +367,13 @@ class YJSearchBaidu extends Component {
         <Button text={'查找'} buttonstyle="1" ClickProp={this.GetSearchDataList}/>
         <Button text={'重置'} buttonstyle="2" ClickProp={this.ResetData}/>
       </div>
-      <div className="nocolor_panel"></div>
-      <div className="nocolor_panel"></div>
-      {
-        this.state.baiduvip==0?
-        <div>
-          <Footer Text={'你尚未开通物贸百度权限，查询被受限'}/>
-          <Footer Text={'开通请联系客服平台：微信/手机13780008543'}/>
-        </div>:undefined
-      }
-
     </div>
   }
 
   renderServSelect(){
     return  <div>
       <div className="weui-cells">
-        <ServList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} servType='3'  GetSelectID={this.GetservID} backprop={this.ToMain} />
+        <ServList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} servType='3'  GetSelectID={this.GetservID} backprop={this.back} />
       </div>
     </div>
   }
@@ -466,7 +381,7 @@ class YJSearchBaidu extends Component {
   renderDepaPortSelect(){
     return  <div>
       <div className="weui-cells">
-        <DepaPortsList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} serv={this.state.serv} GetSelectID={this.GetDepaPortID} backprop={this.ToMain}/>
+        <DepaPortsList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} serv={this.state.serv} GetSelectID={this.GetDepaPortID} backprop={this.back}/>
       </div>
     </div>
   }
@@ -474,7 +389,7 @@ class YJSearchBaidu extends Component {
   renderDestPortSelect(){
     return  <div>
       <div className="weui-cells">
-        <DestPortsList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} serv={this.state.serv} GetSelectID={this.GetDestPortID} backprop={this.ToMain}/>
+        <DestPortsList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} serv={this.state.serv} GetSelectID={this.GetDestPortID} backprop={this.back}/>
       </div>
     </div>
   }
@@ -482,20 +397,19 @@ class YJSearchBaidu extends Component {
   renderCarrSelect(){
     return  <div>
       <div className="weui-cells">
-        <CarrList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} serv={this.state.serv} GetSelectID={this.GetCarrID} backprop={this.ToMain}/>
+        <CarrList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} serv={this.state.serv} GetSelectID={this.GetCarrID} backprop={this.back}/>
       </div>
     </div>
   }
 
   renderDetailSelect(){
     return  <div>
-      <DetailList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} GetChecked={this.GetDetail} backprop={this.ToMain}/>
+      <DetailList BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} GetChecked={this.GetDetail} backprop={this.back}/>
     </div>
   }
 
   renderDataList() {
     return <div>
-      <BackTitle backonClick={this.ToMain}/>
       {
         this.state.SeachDataList.length > 0 ?
           <BaiduList
@@ -508,7 +422,7 @@ class YJSearchBaidu extends Component {
             SearchCondition={this.state.SearchCondition}
             GetDetail={this.GetDataDetail}
             AddProv={this.AddProv}
-            backprop={this.ToMain}/> :
+            backprop={this.back}/> :
           <p>无数据</p>
       }
     </div>
@@ -526,8 +440,7 @@ class YJSearchBaidu extends Component {
         port={this.state.dest}
         GetMsg={this.GetMsg}
         AddpProp={this.AddProv}
-        backprop={this.ToList}
-        GetEvaluate={this.GetEvaluate}
+        backprop={this.back}
       />
     </div>
   }
@@ -535,13 +448,6 @@ class YJSearchBaidu extends Component {
   renderMsg(){
     return  <div>
       <Msg Text={this.state.Msg} Typeprop={this.state.MsgType} Btnprop={this.back} Btntextprop={'返回'}/>
-      {
-        this.state.MsgFoot =='Y'?
-          <div>
-            <Footer Text={'如果查找不到你所需要的供应商'}/>
-            <Footer Text={'请联系客服平台：微信/手机13780008543'}/>
-          </div>:undefined
-      }
     </div>
   }
 
@@ -551,16 +457,9 @@ class YJSearchBaidu extends Component {
     </div>
   }
 
-  renderEvaluate(){
-    return  <div>
-      <Evaluate scor={this.state.scor} winRepl={this.state.winRepl} allRepl={this.state.allRepl} scors={this.state.scors} backprop={this.ToDetail}/>
-    </div>
-  }
-
   render() {
     return (
       <div>
-        
         {
           this.state.Pagestatus=='Main'?
             this.renderSearch():undefined
@@ -600,10 +499,6 @@ class YJSearchBaidu extends Component {
         {
           this.state.Pagestatus=='Addprov'?
             this.renderAddProv():undefined
-        }
-        {
-          this.state.Pagestatus=='Eva'?
-          this.renderEvaluate():undefined
         }
       </div>
     );

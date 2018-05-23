@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../css/weui.css';
+
 class SkipLabel extends Component {
   constructor(props) {
     super(props);

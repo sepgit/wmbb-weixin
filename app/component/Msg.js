@@ -48,12 +48,7 @@ class Msg extends Component {
         </div>
         <div className="weui-msg__text-area">
           <h2 className="weui-msg__title">{this.props.Text}</h2>
-          {
-            this.props.BtnNull==true?
-              undefined:
-            <a className="weui-btn weui-btn_primary" href="javascript:" onClick={this.props.Btnprop}>{this.props.Btntextprop}</a>
-          }
-
+          <a className="weui-btn weui-btn_primary" href="javascript:" onClick={this.props.Btnprop}>{this.props.Btntextprop}</a>
         </div>
       </div>
     )

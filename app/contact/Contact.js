@@ -24,7 +24,7 @@ class Contact extends Component {
         <Title Titletext={'联系我们'}/>
         <div className='demo_line_01'>　　</div>
         <Textline Text={'手机/微信：'}/>
-        <Textline Text={'13780008543'}/>
+        <Textline Text={'13505741577'}/>
         <Textline Text={'　　'}/>
         <Textline Text={'　　'}/>
         <Textline Text={'邮箱：'}/>

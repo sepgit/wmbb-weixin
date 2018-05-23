@@ -17,7 +17,7 @@ export function getCookie(cname){
 
 export function Getwxtoken (){
   //let wxtoken = getCookie("username");
-  let wxtoken = 'otCoBt8-YnV2KFoyOFmAkQu5xCPo';
+  let wxtoken='otCoBt7ub6bpr0W_ff9icvhMJ3oU';
   return wxtoken;
 }
 
@@ -39,54 +39,6 @@ export function getDataList(url,params,rDataList){
     .then((response) => response.json())
     .then((json) => {
       rDataList(json["rows"]);
-    })
-    .catch((error) => {
-      alert(error);
-    });
-}
-
-export function getDataJson(url,params,rDataList){
-  if (params) {
-    let paramsArray = [];
-    //拼接参数
-    Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
-    if (url.search(/\?/) === -1) {
-      url += '?' + paramsArray.join('&')
-    } else {
-      url += '&' + paramsArray.join('&')
-    }
-  }
-  //fetch请求
-  fetch(HTTPED+url,{
-    method: 'GET',
-  })
-    .then((response) => response.json())
-    .then((json) => {
-      rDataList(json);
-    })
-    .catch((error) => {
-      alert(error);
-    });
-}
-
-export function getdistDataList(url,params,rDataList){
-  if (params) {
-    let paramsArray = [];
-    //拼接参数
-    Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
-    if (url.search(/\?/) === -1) {
-      url += '?' + paramsArray.join('&')
-    } else {
-      url += '&' + paramsArray.join('&')
-    }
-  }
-  //fetch请求
-  fetch(HTTPED+url,{
-    method: 'GET',
-  })
-    .then((response) => response.json())
-    .then((json) => {
-      rDataList(json["rows"],json["resultAll"]);
     })
     .catch((error) => {
       alert(error);
@@ -394,36 +346,4 @@ export function postVip(userName,wxtoken, rData){
   }, function(e) {
     message.error("连接服务器失败，请联系管理员！");
   });
-}
-
-
-export function postYJData(url, params, rData) {
-  let urls = '', bodys = '', urlarr = [];
-  if (params) {
-    urlarr = url.split('?')
-    //拼接参数
-    urls = urlarr[0];
-    bodys = urlarr[1];
-  }
-  fetch( HTTPED + urls, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded;  charset=UTF-8"
-    },
-    body: bodys
-  }).then(function (res) {
-   
-    if (res.ok) {
-      res.json().then(function (data) {
-        if (!data.err) {
-          rData(data);
-        } else {
-          rData(data);
-        }
-      });
-    }
-  }, function (e) {
-    message.error("连接服务器失败，请联系管理员！");
-  });
-
 }

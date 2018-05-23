@@ -5,10 +5,6 @@ import Baidu from './baidu/Baidu.js'; //物贸baidu主页
 import AuthenticationIndex from './authentication/AuthenticationIndex.js';   //认证主页
 import Contact from './contact/Contact.js';
 import Introduce from './introduce/Introduce.js';
-import AuthComps from './authcomps/AuthComps.js';
-import Addsuppliers from './addsuppliers/addsuppliers.js';
-import AdvantageNew from './advantagenew/advantageNew.js';
-
 import {Getwxtoken,getCheckbind} from './DataInterface.js';
 
 class Index extends Component {
@@ -85,18 +81,6 @@ class Index extends Component {
         {
           this.state.page=='introduce'?
             <Introduce />:undefined
-        }
-        {
-          this.state.page=='authcomps'?
-            <AuthComps />:undefined
-        }
-        {
-          this.state.page=='addsuppliers'?
-            <Addsuppliers />:undefined
-        }
-        {
-          this.state.page=='advantagenew'?
-            <AdvantageNew />:undefined
         }
       </div>
     );

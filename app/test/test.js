@@ -19,7 +19,6 @@ import Introduce from '../introduce/Introduce.js';    //<Dialog  Submit={this.sh
 import { VelocityTransitionGroup} from 'velocity-react';
 import {getData} from '../DataInterface.js';
 import HTTPED from '../address';
-import Evaluate from '../baidu/Evaluate.js';
 
 class Test extends Component {
   constructor(props) {
@@ -78,7 +77,7 @@ class Test extends Component {
   render() {
     return(
       <div>
-        <Evaluate />
+        <img src={this.state.NuCheckPic}/>
       </div>
     );
   }

@@ -4,15 +4,15 @@ import SkipLabel from  '../component/SkipLabel';
 import Button from '../component/Button.js';
 import Msg from '../component/Msg.js';
 import ServList from '../advancedcomponent/ServList.js';
+import ServOptisList from '../advancedcomponent/ServOptisList.js';
 import PortsList from '../advancedcomponent/PortsList.js';
+
+import DetailList from './DetailList.js';
 import BaiduList from './BaiduList.js';
 import AddProv from './AddProv.js';
-import Evaluate from './Evaluate.js';
 import BaiduItemDetail from './BaiduItemDetail.js';
 import Title from  '../component/Title.js';
-import {getDataList,getCheckbind,Getwxtoken,getdistDataList,getDataJson} from '../DataInterface.js';
-import BackTitle from '../component/BackTitle.js';
-import Footer from '../component/Footer.js';
+import {getDataList,getCheckbind,Getwxtoken} from '../DataInterface.js';
 
 class TZSearchBaidu extends Component {
   constructor(props) {
@@ -25,16 +25,16 @@ class TZSearchBaidu extends Component {
     this.renderDataDetail=this.renderDataDetail.bind(this);           //数据明细
     this.renderMsg=this.renderMsg.bind(this);                         //返回
     this.renderAddProv=this.renderAddProv.bind(this);                 //添加供应商界面
-    this.renderEvaluate=this.renderEvaluate.bind(this);                 //评价
 
     this.ServonClick=this.ServonClick.bind(this);       //跳转到服务界面
     this.PortonClick=this.PortonClick.bind(this);       //跳转到起运地选择框
     this.GetDataDetail=this.GetDataDetail.bind(this);         //转到明细界面
     this.AddProv=this.AddProv.bind(this);                     //转到添加供应商界面
-    this.GetEvaluate=this.GetEvaluate.bind(this);             //转到评分界面
 
+    //this.GetDataList=this.GetDataList.bind(this);
     this.GetservID=this.GetservID.bind(this);
     this.GetPortID=this.GetPortID.bind(this);
+
     this.getServList=this.getServList.bind(this);         //查找运价类型
     this.GetRServList=this.GetRServList.bind(this);
 
@@ -43,16 +43,12 @@ class TZSearchBaidu extends Component {
     this.ResetData=this.ResetData.bind(this);                       //重置选择项
     this.GetMsg=this.GetMsg.bind(this);
     this.back=this.back.bind(this);
-    this.ToDetail=this.ToDetail.bind(this);
-    this.ToList=this.ToList.bind(this);
-    this.ToMain=this.ToMain.bind(this);
-    this.GetbaiduVip = this.GetbaiduVip.bind(this);
-    this.GetRbaiduVip = this.GetRbaiduVip.bind(this);
 
     this.state = {
       user:0,
       BinduserName:'',
       wxtoken:'',
+      Pagestatus:'Main',    //Main主界面
       serv:0,
       servName:'',
       servOpti:0,
@@ -64,15 +60,8 @@ class TZSearchBaidu extends Component {
       SelectID:0,
       Selectuser:0 ,    //查看用户明细id
       MsgType:0,
-      MsgFoot:'',
       backto:'',         //返回界面
-      SearchCondition:[],
-      scor:0,
-      winRepl:0,
-      allRepl:0,
-      scors:[],
-      baiduvip:0,
-      Pagestatus:'Main',    //Main主界面
+      SearchCondition:[]
     }
   }
 
@@ -87,31 +76,10 @@ class TZSearchBaidu extends Component {
   getBuserName(value){
     if (!value.err) {
       let userJson = value.user;
-      let wxtoken = this.state.wxtoken;
       this.setState({
         BinduserName: userJson.userAcco,
         user:userJson.user
       });
-      this.GetbaiduVip(userJson.userAcco,wxtoken);
-    }
-  }
-
-  GetbaiduVip(userName,wxtoken){
-    let url = 'api/disps/?userName='+userName+'&wxtoken='+wxtoken+'&isCheck=true';
-    getDataJson(url,[],this.GetRbaiduVip);
-  }
-
-  GetRbaiduVip(value){
-    let dispsJson =value;
-    console.log(dispsJson);
-    if(!dispsJson.err){
-      this.setState({
-        baiduvip:1
-      })
-    } else {
-      this.setState({
-        baiduvip:0
-      })
     }
   }
 
@@ -131,8 +99,7 @@ class TZSearchBaidu extends Component {
     let port = this.state.port;
     let portName = this.state.portName;
     let url = 'api/disps/?userName='+userName+'&wxtoken='+wxtoken+'&rowCount=0&pageIndex=1&isAdva=true&advaType=1&serv='+serv
-      +'&depaPort='+port;
-
+      +'&port='+port;
     let sites=[
       {'name':'服务类型','value':servName},
       {'name':'口岸','value':portName}
@@ -145,7 +112,7 @@ class TZSearchBaidu extends Component {
       this.setState({
         SearchCondition:sites
       });
-      getdistDataList(url,[],this.GetRSearchDataList);
+      getDataList(url,[],this.GetRSearchDataList);
     }
   }
 
@@ -168,33 +135,25 @@ class TZSearchBaidu extends Component {
     })
   }
 
-  GetRSearchDataList(value,resultAll){
+  GetRSearchDataList(value){
     if (value.length>0){
       this.setState({
         SeachDataList:value,
         Pagestatus:'List',
         backto:'Main'
       })
-    } else if (resultAll>0)
-    {
-      this.setState({
-        MsgType:2,      //错误标识
-        Pagestatus: 'Msg',
-        Msg:'请联系平台客服开通物贸百度查看权限，平台客服联系方式 手机（微信）：13780008543',
-        backto:'Main'
-      });
     } else {
       this.setState({
         MsgType:2,      //错误标识
         Pagestatus: 'Msg',
         Msg:'该条件无可查询数据',
-        backto:'Main',
-        MsgFoot:'Y'
+        backto:'Main'
       });
     }
   }
 
   GetDataDetail(value){
+    console.log("value="+value);
     let a = this.state.Pagestatus;
     this.setState({
       SelectID:value,
@@ -256,44 +215,14 @@ class TZSearchBaidu extends Component {
     }
   }
 
-  GetEvaluate(scor,winRepl,allRepl,scors){
-    this.setState({
-      Pagestatus:'Eva',
-      scor:scor,
-      winRepl:winRepl,
-      allRepl:allRepl,
-      scors:scors,
-    });
-  }
-
   back(){
     this.setState({
-      Pagestatus:this.state.backto,
-      MsgFoot:''
-    });
-  }
-
-  ToDetail(){
-    this.setState({
-      Pagestatus:'Detail'
-    });
-  }
-
-  ToList(){
-    this.setState({
-      Pagestatus:'List'
-    });
-  }
-
-  ToMain(){
-    this.setState({
-      Pagestatus:'Main'
+      Pagestatus:this.state.backto
     });
   }
 
   renderSearch(){
     return  <div>
-      <BackTitle backonClick={this.props.ToMain}/>
       <Title Titletext={'特种货运价类型'}/>
       <div className="weui-cells">
         {
@@ -313,15 +242,6 @@ class TZSearchBaidu extends Component {
         <Button text={'查找'} buttonstyle="1" ClickProp={this.GetSearchDataList}/>
         <Button text={'重置'} buttonstyle="2" ClickProp={this.ResetData}/>
       </div>
-      <div className="nocolor_panel"></div>
-      <div className="nocolor_panel"></div>
-      {
-        this.state.baiduvip==0?
-          <div>
-            <Footer Text={'你尚未开通物贸百度权限，查询被受限'}/>
-            <Footer Text={'开通请联系客服平台：微信/手机13780008543'}/>
-          </div>:undefined
-      }
     </div>
   }
 
@@ -343,7 +263,6 @@ class TZSearchBaidu extends Component {
 
   renderDataList() {
     return <div>
-      <BackTitle backonClick={this.ToMain}/>
       {
         this.state.SeachDataList.length > 0 ?
           <BaiduList
@@ -375,7 +294,6 @@ class TZSearchBaidu extends Component {
         GetMsg={this.GetMsg}
         AddpProp={this.AddProv}
         backprop={this.back}
-        GetEvaluate={this.GetEvaluate}
       />
     </div>
   }
@@ -383,25 +301,12 @@ class TZSearchBaidu extends Component {
   renderMsg(){
     return  <div>
       <Msg Text={this.state.Msg} Typeprop={this.state.MsgType} Btnprop={this.back} Btntextprop={'返回'}/>
-      {
-        this.state.MsgFoot =='Y'?
-          <div>
-            <Footer Text={'如果查找不到你所需要的供应商'}/>
-            <Footer Text={'请联系客服平台：微信/手机13780008543'}/>
-          </div>:undefined
-      }
     </div>
   }
 
   renderAddProv(){
     return  <div>
       <AddProv BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} cont={this.state.Selectuser} backprop={this.back}/>
-    </div>
-  }
-
-  renderEvaluate(){
-    return  <div>
-      <Evaluate scor={this.state.scor} winRepl={this.state.winRepl} allRepl={this.state.allRepl} scors={this.state.scors} backprop={this.ToDetail}/>
     </div>
   }
 
@@ -435,10 +340,6 @@ class TZSearchBaidu extends Component {
         {
           this.state.Pagestatus=='Addprov'?
             this.renderAddProv():undefined
-        }
-        {
-          this.state.Pagestatus=='Eva'?
-            this.renderEvaluate():undefined
         }
       </div>
     );
