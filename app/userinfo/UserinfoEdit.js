@@ -6,10 +6,10 @@ import Button from '../component/Button.js';
 import Msg from '../component/Msg.js';
 import StrInput from  '../component/StrInput.js';
 import Title from  '../component/Title.js';
-import UnEnableInput from '../component/UnEnableInput.js'
+import UnEnableInput from '../component/UnEnableInput.js';
 import IndusList from '../advancedcomponent/IndusList.js';
 import {getCheckbind, getUserInfo,Getwxtoken,putUserInfo,putunbind} from '../DataInterface.js';
-//D:\web-app\wmbb-weixin\public\weixin\image\LOGO.jpg
+
 class UserinfoEdit extends Component {
   constructor(props) {
     super(props);

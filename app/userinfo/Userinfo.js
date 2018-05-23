@@ -164,15 +164,13 @@ class UserInfo extends Component {
       });
     }
     else {
-      if (!value.err) {
-        this.setState({
-          Msg: value.errMsg,
-          MsgType: 2,
-          MsgToPage: 'UnBind',
-          MsgBtntext: '返回',
-          Pagestatus: 'Msg',
-        });
-      }
+      this.setState({
+        Msg: value.errMsg,
+        MsgType: 2,
+        MsgToPage: 'UnBind',
+        MsgBtntext: '返回',
+        Pagestatus: 'Msg',
+      });
     }
   }
 
@@ -315,6 +313,7 @@ class UserInfo extends Component {
   renderReg(){
     return  <div>
       <BackTitle backonClick={this.MsgToPageonClick}/>
+      <div className="title_fixed_space"></div>
       <Register GetReg={this.GetReg} ActOnClick={this.ToAct}/>
     </div>
   }
@@ -322,6 +321,7 @@ class UserInfo extends Component {
   renderAct(){
     return  <div>
       <BackTitle backonClick={this.ToUnBind}/>
+      <div className="title_fixed_space"></div>
       <Activate userName={this.state.ZCuserName} GetReActive={this.GetReActive} />
     </div>
   }
@@ -329,6 +329,7 @@ class UserInfo extends Component {
   renderUndobind(){
     return  <div>
       <BackTitle backonClick={this.ToUnBind}/>
+      <div className="title_fixed_space"></div>
       <Undobind wxtoken={this.state.wxtoken} ToBinded={this.ToBinded} GetRUnbind={this.GetRUnbind}/>
     </div>
   }
@@ -342,6 +343,7 @@ class UserInfo extends Component {
   render() {
     return (
       <div>
+        
         {
           this.state.Pagestatus=='UnBind'?
             this.renderUnBind():undefined

@@ -10,8 +10,8 @@ module.exports = {
     contentBase: "./public/weixin",//本地服务器所加载的页面所在的目录
     historyApiFallback: true,//不跳转
     disableHostCheck: true,
-    host: '192.168.16.152',
-    port:5220,
+    host: '192.168.16.184',
+    port:5004,
     inline: true//实时刷新
   },
   module: {

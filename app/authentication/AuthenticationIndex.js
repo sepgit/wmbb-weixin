@@ -185,7 +185,10 @@ class AuthenticationIndex extends Component {
 
   renderisVip(){
     return  <div>
-      <Msg Typeprop={this.state.MsgType} Text={'会员认证已经通过'} Btntextprop={'查看认证会员权益'} Btnprop={this.ToRights}/>
+      <Msg Typeprop={this.state.MsgType} Text={'认证已经通过'} Btntextprop={'查看认证会员权益'} Btnprop={this.ToRights}/>
+      <div className="weui-msg__text-area">
+        <a className="weui-btn weui-btn_primary" href="javascript:">{'认证续费'}</a>
+      </div>
     </div>
   }
 
@@ -220,6 +223,7 @@ class AuthenticationIndex extends Component {
   render() {
     return (
       <div>
+        <div className="title_fixed_space"></div>
         {
           this.state.Pagestatus=='Rights'?
             this.renderRights():undefined

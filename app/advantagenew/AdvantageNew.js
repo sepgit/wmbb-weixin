@@ -935,7 +935,7 @@ class AdvantageNew extends Component {
                 {
                     this.state.clickLines == '' ?
                         <div className="labelChoose">
-                            <span className="reds"> * </span><SkipLabel caption={'起运地航线'} text={'请选择起运地航线'} SelfonClick={this.chooseLines} />
+                            <span className="red"> * </span><SkipLabel caption={'起运地航线'} text={'请选择起运地航线'} SelfonClick={this.chooseLines} />
                         </div> :
                         <div className="labelChoose">
                             <span className="red"> * </span><SkipLabel caption={'起运地航线'} text={this.state.clickLines} SelfonClick={this.chooseLines} />
