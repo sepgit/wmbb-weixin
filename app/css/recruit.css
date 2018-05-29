@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+}
+ol,
+ul,
+li {
+  list-style: none;
+}
+img {
+  border: 0 none;
+  vertical-align: middle;
+}
+button {
+  outline: 0 none;
+  border: 0 none;
+}
+input {
+  outline: none;
+}
+html {
+  font-size: 62.5%;
+}
+body {
+  max-width: 53.33333333rem;
+  min-width: 26.66666667rem;
+  margin: 0 auto;
+  background: #ccc;
+  height: 100%;
+}
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:after {
+  content: ",";
+  display: block;
+  visibility: hidden;
+  clear: both;
+  line-height: 0;
+  font-size: 0;
+  height: 0;
+}
+.text_cen {
+  text-align: center;
+}
+.mar0 {
+  margin: 0 auto;
+}
+.re_input {
+  height: 4rem;
+  line-height: 4rem;
+  border: 1px solid #cccacb;
+  background: #ebe9ea;
+  font-size: 2.16666667rem;
+  border-radius: 0.5rem;
+  padding-left: 0.41666667rem;
+}
+.re_body {
+  background: #fff;
+}
+.r_titele {
+  width: 100%;
+  height: 6.66666667rem;
+  line-height: 6.66666667rem;
+  background: #0b91f0;
+  font-size: 3.33333333rem;
+  color: #fff;
+}
+.re_conditions {
+  margin: 3.83333333rem auto;
+}
+.re_conditions li {
+  height: 4.16666667rem;
+  line-height: 4.16666667rem;
+  margin: 0 auto 2.16666667rem;
+  font-size: 2.16666667rem;
+}
+.re_conditions li span {
+  display: inline-block;
+  width: 30%;
+}
+.re_conditions li input {
+  height: 4rem;
+  line-height: 4rem;
+  border: 1px solid #cccacb;
+  background: #ebe9ea;
+  font-size: 2.16666667rem;
+  border-radius: 0.5rem;
+  padding-left: 0.41666667rem;
+  width: 65%;
+}
+.recruit_tit {
+  position: relative;
+}
+.recruit_tit .recruit_tit_search {
+  width: 6.66666667rem;
+  height: 6.66666667rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 3.33333333rem;
+  color: #fff;
+  line-height: 6.66666667rem;
+}
+.re_lists_all {
+  margin: 1.66666667rem 0 0;
+  background: #fff;
+}
+.re_lists_all .re_compIcon {
+  width: 12.5rem;
+  height: 12.5rem;
+  float: left;
+}
+.re_lists_all .re_lists_ul {
+  float: left;
+  width: 50%;
+}
+.re_lists_all .re_lists_ul li div {
+  float: left;
+  height: 4.16666667rem;
+  line-height: 4.16666667rem;
+  width: 65%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.re_lists_all .re_lists_ul li span {
+  float: right;
+  height: 4.16666667rem;
+  line-height: 4.16666667rem;
+  width: 35%;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.re_comp_compname {
+  height: 23.75rem;
+  padding-top: 3.75rem;
+}
+.re_comp_tips {
+  height: 5.83333333rem;
+  padding-left: 8.33333333rem;
+  line-height: 5.83333333rem;
+  position: relative;
+}
+.re_comp_tips:after {
+  content: '';
+  width: 2.08333333rem;
+  height: 2.08333333rem;
+  position: absolute;
+}
