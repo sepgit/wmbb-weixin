@@ -8,6 +8,7 @@ import Introduce from './introduce/Introduce.js';
 import AuthComps from './authcomps/AuthComps.js';
 import Addsuppliers from './addsuppliers/addsuppliers.js';
 import AdvantageNew from './advantagenew/advantageNew.js';
+import Recruit from './recruit/recruit.js';
 
 import {Getwxtoken,getCheckbind} from './DataInterface.js';
 
@@ -97,6 +98,10 @@ class Index extends Component {
         {
           this.state.page=='advantagenew'?
             <AdvantageNew />:undefined
+        } 
+        {
+          this.state.page=='recruit'?
+            < Recruit />:undefined
         }
       </div>
     );
