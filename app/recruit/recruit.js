@@ -9,7 +9,8 @@ import BackTitle from '../component/BackTitle.js';
 import Title from '../component/Title.js';
 import RecruitSearch from './recruitsearch.js';
 import RecruitListAll from './recruitListAll.js';
-import ReCompDetail from './recruitCompDetail.js'
+import ReCompDetail from './recruitCompDetail.js';
+import BackT from '../advantagenew/backT.js'
 import { getDataList, getCheckbind, Getwxtoken, getUserInfo, postProv, postData, postYJData, getDataDetail } from '../DataInterface.js';
 class Recruit extends Component {
   constructor(props) {
@@ -19,6 +20,10 @@ class Recruit extends Component {
     this.backfun = this.backfun.bind(this);
     this.backReLists = this.backReLists.bind(this);//招聘列表页面的数据
     // this.toCompDetail = this.toCompDetail.bind(this);//去公司详情页面
+    this.compDetail = this.compDetail.bind(this);
+    this.backto = this.backto.bind(this);
+    // this.handleClick=this.handleClick.bind(this);
+    
     this.state = {
       user: 0,//用户id
       comp: 0,//公司id
@@ -26,6 +31,9 @@ class Recruit extends Component {
       wxtoken: '',
       Pagestatus: 'recruit', // recruit 招聘列表页  recruitSearch 招聘搜索  compDetail 公司详情页面
       recruitmentLists: [],
+      showRelists:true,//是否显示 一开始进入时的 五个列表
+      recomp:"",//招聘的公司id
+      reid:'',//招聘信息的id
     }
   }
   componentWillMount() {
@@ -47,7 +55,7 @@ class Recruit extends Component {
     let BinduserName = this.state.BinduserName;
     let wxtoken = this.state.wxtoken;
     let user = this.state.user;
-    let url = 'api/recruitment/?hiring=&salary=&city=&rowCount=5&pageIndex=1';
+    let url = 'api/recruitment/?hiringName=&salary=&city=&rowCount=5&pageIndex=1';
     getDataList(url, [], this.backfun)
   }
 
@@ -61,23 +69,42 @@ class Recruit extends Component {
   toSearch() {
     this.setState({
       Pagestatus: 'recruitSearch',
+      showRelists:false,
     })
   }
   backReLists() {
     let value = this.state.recruitmentLists;
     let _this = this;
     return value.map(s => {
-      return <RecruitListAll key={s.recruitment} thevalue={s} toDetail={_this.toCompDetail.bind(s, s.recruitment, s.comp)}></RecruitListAll>
+      return <RecruitListAll key={s.recruitment} thevalue={s} toDetail={_this.toCompDetail.bind(s, s.recruitment, s.comp,_this)} BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken}></RecruitListAll>
       // 传递 招聘id 和 公司id
     });
   }
-  toCompDetail(reid, comp) {
-    console.log(reid, comp);
+  toCompDetail(reid, comp,_this) {
+    _this.setState({
+      Pagestatus:'compDetail',
+      showRelists:false,
+      recomp:comp,
+      reid:reid
+    })
+  }
 
-  }
   compDetail() {
-    return <ReCompDetail></ReCompDetail>
+    return <ReCompDetail backto={this.backto} comp ={this.state.recomp} BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} reid={this.state.reid} ></ReCompDetail>
   }
+  backto() {
+    this.setState({
+      Pagestatus: 'recruit',
+      showRelists:true,
+    })
+  }
+  // handleClick(e) {
+  //   let hiringName= e.target.getAttribute('name');
+  //   this.setState({
+  //     hiringName:hiringName,
+  //     Pagestatus : 'recruitSearch'
+  //   })
+  // }
   render() {
     return (
       <div>
@@ -94,14 +121,14 @@ class Recruit extends Component {
         }
         {
           this.state.Pagestatus == 'recruitSearch' ?
-            <RecruitSearch></RecruitSearch> : undefined
+            <RecruitSearch backto={this.backto} ></RecruitSearch> : undefined
+        }
+        { this.state.showRelists ?
+          this.backReLists():undefined
         }
         {
-          this.backReLists()
-        }
-        {
-          this.state.Pagestatus == 'recruitSearch' ?
-          <RecruitSearch></RecruitSearch> : undefined
+          this.state.Pagestatus == 'compDetail' ?
+           this.compDetail() : undefined
         }
 
       </div>

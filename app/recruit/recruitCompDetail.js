@@ -6,33 +6,216 @@ import Rpath from '../Rpath.js';
 import HTTPED from '../address';
 import StrInput from '../component/StrInput.js';
 import BackTitle from '../component/BackTitle.js';
-import Title from '../component/Title.js'
-import RecruitSearch from './recruitsearch.js'
+import Title from '../component/Title.js';
+import RecruitSearch from './recruitsearch.js';
+import { getDataList, getCheckbind, Getwxtoken, getUserInfo, postProv, postData, postYJData, getDataDetail } from '../DataInterface.js';
+import BackT from '../advantagenew/backT.js';
 
 class ReCompDetail extends Component {
     constructor(props) {
         super(props);
+        this.bkFun = this.bkFun.bind(this);
+        this.relistall=this.relistall.bind(this);//一个公司下 所有的招聘职位
+        this.showlists = this.showlists.bind(this);
+        this.relistDetail = this.relistDetail.bind(this);//点击到具体的信息
+        this.relistDetailshow = this.relistDetailshow.bind(this);
+        this.reshow = this.reshow.bind(this);
+        this.backtogw = this.backtogw.bind(this);
         this.state = {
+            comp: this.props.comp,
+            reid:this.props.reid,
+            BinduserName: this.props.BinduserName,//当前用户
+            wxtoken: this.props.wxtoken,
+            logo:'',
+            compArr:'',
+            relists:[],
+            relistDetailNum:'',
+            showPage:'companyDetail',//companyDetail 公司详情  relistDetail 公司下招聘详情
+            recruitmentData:'',
+        }
+    } 
+    componentWillMount() {
+        let userName=this.state.BinduserName;
+        let wxtoken=this.state.wxtoken;
+        let comp = this.state.comp;
+        let url = 'api/comps/'+comp +'?userName='+userName+ '&wxtoken='+wxtoken;
+        getDataDetail(url, this.bkFun);
+        let urls = 'api/recruitment/?comp='+this.state.comp +'&rowCount=4&pageIndex=1';
+        getDataList(urls,[] ,this.relistall)
+    }
+    relistall(data) {
+        this.setState({
+            relists:data,
+        })
+    }
+    showlists() {
+        let data = this.state.relists;
+        // console.log(data);
+        return data.map(datas => {
+            return <li className="re_lists" key={datas.recruitment} onClick={this.relistDetail} num={datas.recruitment}>
+                <span>{datas.hiringName}</span>
+                <span>{datas.salaryName}</span>
+                <span>{datas.num}</span>
+            </li>
+        })
+    }
+    relistDetail(e) {
+        let num = e.target.parentNode.getAttribute('num');
+        console.log(num);
+        this.setState({
+            showPage:'relistDetail',
+            // relistDetailNum:num,
+        })
+        // console.log(this.state.relistDetailNum);
+        this.relistDetailshow(num)
+    }
+    relistDetailshow(num) {
+        let recruitment =num;
+        console.log(recruitment);
+        let url = 'api/recruitment/'+recruitment+'/';
+        getDataDetail(url, this.reshow);
+    }
+    reshow(data){
+        console.log(data);
+        if (!data.err) {
+            let recruitment = data.recruitment;
+            this.setState({
+                recruitmentData:recruitment
+            })
+        }else {
 
         }
-    }
+        
 
+    }
+    bkFun(data) {
+        // console.log(data);
+        if (!data.err) {
+            let comp = data.comp;
+            let logo = comp.logo;
+            if (logo != undefined) {
+              let logoUrl =  HTTPED +logo;
+              this.setState({
+                compArr:comp,
+                logo:logoUrl
+              })
+            }else {
+              let logoUrl =  HTTPED + 'images/nlogo.png';
+              this.setState({
+                compArr:comp,
+                logo:logoUrl
+              })
+            }
+        }
+    }
+    backtogw() {
+        this.setState({
+            showPage:'companyDetail'
+        })
+    }
     render() {
+        let dutis,requirementsinfos,experiences;
+        if (this.state.recruitmentData.duti != undefined) {
+            let duti = this.state.recruitmentData.duti;
+            let dutiarr = duti.split(/\s/)
+            dutis = dutiarr.map(x => {
+                return <p>
+                    {x}
+                </p>
+            })
+        }
+        if (this.state.recruitmentData.duti != undefined) {
+            let requirementsinfo = this.state.recruitmentData.requirementsinfo;
+            let requirementsinfoArr = requirementsinfo.split(/\s/)
+            requirementsinfos = requirementsinfoArr.map(x => {
+                return <p>
+                    {x}
+                </p>
+            })
+        }
+        if (this.state.recruitmentData.duti != undefined) {
+            let experience = this.state.recruitmentData.experience;
+            let experiencearr = experience.split(/\s/)
+            experiences = experiencearr.map(x => {
+                return <p>
+                    {x}
+                </p>
+            })
+        }
         return (
-            <div className="re_comp_detail">
+            <div>
+            {    
+               this.state.showPage == 'companyDetail' ?
+               <div className="re_comp_detail">
+                <BackT tit="公司详情" backonClick={this.props.backto}></BackT>
+                <div className="titleback"></div>
                 <div className="r_titele text_cen">公司详情</div>
                 <div className="re_comp_compname">
-                    <div></div>
-                    <div></div>
+                    <div className="bg"></div>
+                    <div className="re_comp_logo"><img src={this.state.logo} alt="logo"/></div>
+                    <div className="re_comp_name">{this.state.compArr.compName}</div>
                 </div>
                 <div className="re_comp_tips">招聘信息</div>
-                <div>
-                    
-                </div>
-                <div className="re_comp_tips">公司信息</div>
-                <div></div>
+                {
+                    this.state.relists.length !=0 ?
+                    <div>
+                        <div className="re_lists_title">
+                            <span>岗位</span>
+                            <span>薪资待遇</span>
+                            <span>招聘人数</span>
+                        </div>
+                        <ul className="re_list">
+                            {
+                                this.showlists()
+                            }
+                        </ul>
+                    </div> : undefined
+                }
+                <div className="re_comp_tips">公司简介</div>
+                {/* <div className="re_comp_msg">{this.state.compArr}</div> */}
                 <div className="re_comp_tips">联系方式</div>
-                <div></div>
+                <div className="re_comp_phon">电话：{this.state.compArr.phon}</div>
+                <div className="re_comp_tips">公司地址</div>
+                <div className="re_comp_msg">{this.state.compArr.addr}</div>
+            </div>:undefined
+            }
+            {
+                this.state.showPage == 'relistDetail'?
+                <div className="re_position_bg">
+                <BackT tit="岗位详情" backonClick={this.backtogw}></BackT>
+                <div className="titleback"></div>
+                    <div className="r_titele text_cen">岗位详情</div>
+                    <div className="re_position_name clearfix">
+                        <div>{this.state.recruitmentData.hiringName}</div>
+                        <span>{this.state.recruitmentData.salaryName}</span>
+                    </div>
+                    <div className="re_position_comp">{this.state.recruitmentData.compName}</div>
+                    <div className="re_comp_tips">招聘信息</div>
+                    <ul  className="re_position_msgs">
+                        {
+                            this.state.recruitmentData.duti != ""?
+                            <li>
+                                <h3>岗位职责</h3>
+                                {dutis }
+                            </li>:undefined
+                        }
+                        {
+                            this.state.recruitmentData.requirementsinfo != ""?
+                            <li>
+                                <h3>任职要求</h3>
+                                {requirementsinfos }
+                            </li>:undefined
+                        }
+                        {
+                            this.state.recruitmentData.experience != ""?
+                            <li>
+                                <h3>其他事项</h3>
+                                {experiences }
+                            </li>:undefined
+                        }
+                    </ul>
+                </div>:undefined
+            }
             </div>
         )
     }
