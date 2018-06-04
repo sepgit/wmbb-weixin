@@ -63,6 +63,7 @@ body {
 }
 .re_body {
   background: #fff;
+  padding-bottom: 5rem;
 }
 .r_titele {
   width: 100%;
@@ -94,6 +95,7 @@ body {
   border-radius: 0.5rem;
   padding-left: 0.41666667rem;
   width: 65%;
+  color: #333;
 }
 .re_conditions li select {
   height: 4rem;
@@ -104,6 +106,7 @@ body {
   border-radius: 0.5rem;
   padding-left: 0.41666667rem;
   width: 65%;
+  color: #333;
 }
 .re_conditions li select option {
   height: 4rem;
@@ -112,6 +115,7 @@ body {
   background: #ebe9ea;
   font-size: 1.83333333rem;
   width: 40%;
+  color: #333;
 }
 .recruit_tit {
   position: relative;
@@ -182,12 +186,33 @@ body {
 .re_lists {
   display: flex;
   justify-content: space-between;
+  height: 3.33333333rem;
 }
 .re_lists span {
   height: 3.33333333rem;
   width: 33%;
   font-size: 1.33333333rem;
   line-height: 3.33333333rem;
+  text-align: center;
+}
+.re_lists_paging {
+  height: 3.33333333rem;
+  display: flex;
+  justify-content: space-between;
+}
+.re_lists_paging span {
+  height: 3.33333333rem;
+  width: 33%;
+  font-size: 1.33333333rem;
+  line-height: 3.33333333rem;
+}
+.re_lists_paging span:nth-child(1) {
+  text-align: center;
+}
+.re_lists_paging span:nth-child(2) {
+  text-align: center;
+}
+.re_lists_paging span:nth-child(3) {
   text-align: center;
 }
 .re_lists:nth-child(even) {
@@ -287,6 +312,7 @@ body {
 .re_position_msgs li p {
   line-height: 2.66666667rem;
   font-size: 1.33333333rem;
+  padding-right: 2.5rem;
 }
 .hiringCH {
   position: fixed;
@@ -295,6 +321,7 @@ body {
   right: 0;
   bottom: 0;
   background: #fff;
+  padding-bottom: 5rem;
 }
 .hiringCH .r_hiring_lists {
   margin: 0 auto;
@@ -348,4 +375,15 @@ body {
 }
 .re_search {
   background: #0b91f0;
+}
+.city_lists li {
+  float: left;
+  border: 1px solid #333;
+  border-radius: 0.33333333rem;
+  text-align: center;
+  margin: 0.83333333rem 2%;
+  background: #e6e6e6;
+  padding: 0.83333333rem;
+  font-size: 1.16666667rem;
+  line-height: 1.33333333rem;
 }

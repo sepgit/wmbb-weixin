@@ -19,12 +19,22 @@ class RecruitSearch extends Component {
     this.backfun = this.backfun.bind(this);
     this.cityOnchange = this.cityOnchange.bind(this);
     this.renderList=this.renderList.bind(this);
+    this.cityClick=this.cityClick.bind(this);
+    this.searchFun = this.searchFun.bind(this);
+    this.GetMsg = this.GetMsg.bind(this);
+    this.back =this.back.bind(this);
     this.state = {
       Pagestatus:'recruitsearch',
-      hiringName:"",
-      salary:'',
+      ulShow:false,
       cityLists:[],
-      ChangeCarrList:[]
+      ChangeCarrList:[],
+      citys:'',
+      cityID:'',
+      hiringName:"",
+      salary:0,
+      MsgType: '',      //错误标识
+      Msg: '',
+      backto:'',
     }
   }
   componentWillMount(){
@@ -59,7 +69,7 @@ class RecruitSearch extends Component {
     getDataList(url, [], this.backfun)
   }
   backfun(data){
-    console.log(data);
+    // console.log(data);//所有城市
     this.setState({
       cityLists:data,
     })
@@ -73,15 +83,17 @@ class RecruitSearch extends Component {
     if (v!=''){
       for (let i=0;i<this.state.cityLists.length;i++)
       {
-        chv=this.state.cityLists[i].cityname
+        chv=this.state.cityLists[i].cityname + this.state.cityLists[i].provinceName
         if (chv.indexOf(v)!=-1){
-          Ob={carr:this.state.cityLists[i].cityid, carrName:this.state.cityLists[i].cityname};
+          Ob={carr:this.state.cityLists[i].cityid, carrName:this.state.cityLists[i].cityname+'/'+this.state.cityLists[i].provinceName};
           arr.push(Ob);
         }
       }
     }
     this.setState({
-      ChangeCarrList:arr
+      ChangeCarrList:arr,
+      citys:v,
+      ulShow:true
     })
   }
   renderList() {
@@ -89,8 +101,54 @@ class RecruitSearch extends Component {
     let data = this.state.ChangeCarrList;
     return data.map(datas =>{
       console.log(datas);
-      return <div key={datas.carr}>{datas.carrName}</div>
+      return <li key={datas.carr} onClick={this.cityClick} cityID={datas.carr}>{datas.carrName}</li>
     })
+  }
+  cityClick(e) {
+    let citys = e.target.innerHTML;
+    let cityID  = e.target.getAttribute('cityID');
+    console.log(citys);
+    this.setState({
+      citys:citys,
+      cityID:cityID,
+      ulShow:false
+    })
+  }
+  searchFun(){
+    // console.log(this.state);
+    let a = this.state.hiringName;
+    let b = this.state.salary;
+    let c = this.state.cityID;
+    if (a == '') {
+      this.GetMsg(2,'请选择正确职位')
+    }else if (b == '' || b==0) {
+      this.GetMsg(2,'选择正确的薪资范围')
+    }else if(c == ''){
+      this.GetMsg(2,'选择正确的城市')
+    }else {
+      this.props.searchs(a,b,c)
+    }
+    console.log(this.state.salary);
+  }
+  GetMsg(MsgType, ErrMsg) {
+    this.setState({
+        MsgType: MsgType,      //错误标识
+        Pagestatus: 'Msg',
+        Msg: ErrMsg,
+        backto: 'recruitsearch',
+    });
+  }
+  back() {
+    this.setState({
+      //错误标识
+      Pagestatus: 'recruitsearch'
+  });
+  }
+  renderMsg() {
+    return <div>
+        {/* <BackT backonClick={this.back} ></BackT> */}
+        <Msg Text={this.state.Msg} Typeprop={this.state.MsgType} Btnprop={this.back} Btntextprop={'返回'} />
+    </div>
   }
   render() {
     let logoUrl =  HTTPED + 'images/';
@@ -113,8 +171,8 @@ class RecruitSearch extends Component {
               </li>
               <li>
                 <span>薪资待遇</span>
-                <select name="" id="" onChange={this.selectChange }>
-                  <option value="0">请选择</option>
+                <select name="s" id="id" onChange={this.selectChange} value={this.state.salary}  >
+                  <option value="0" >请选择</option>
                   <option value="1">2000-3000</option>
                   <option value="2">3000-5000</option>
                   <option value="3">5000-8000</option>
@@ -124,16 +182,24 @@ class RecruitSearch extends Component {
               </li>
               <li>
                 <span>工作地点</span>
-                <input type="text" placeholder="请选择" onChange={this.cityOnchange}/>
+                <input type="text" placeholder="输入城市名称并在下方选择" onChange={this.cityOnchange} value={this.state.citys}/>
               </li>
             </ul>
-            <div>
-                <a href="" className="weui-btn re_search">查找</a>
-            </div>
+            
             {
-              this.state.ChangeCarrList.length !=0 ?
-              this.renderList():undefined
+              this.state.ChangeCarrList.length !=0?
+              <ul className="city_lists clearfix">
+              {
+                this.state.ulShow == true?
+                this.renderList():undefined
+              }
+                
+              </ul>:undefined
             }
+            <div>
+                <a href="javascript:void(0)" className="weui-btn re_search" onClick={this.searchFun}>查找</a>
+                {/* <a href="javascript:void(0)" className="weui-btn re_search" onClick={this.props.searchs}>查找</a> */}
+            </div>
         </div>:undefined
         }
         {
@@ -163,7 +229,7 @@ class RecruitSearch extends Component {
                 <span name="商务"></span>
               </li>
               <li onClick={this.handleClick}>
-                <div><img src={logoUrl+'ye.png'} alt="业务"/></div>
+                <div><img src={logoUrl+'yw.png'} alt="业务"/></div>
                 <p>业务</p>
                 <span name="业务"></span>
               </li>
@@ -190,7 +256,10 @@ class RecruitSearch extends Component {
             </ul>
           </div>:undefined
         }
-        
+        {
+          this.state.Pagestatus == 'Msg' ?
+            this.renderMsg() : undefined
+        }
       </div>
     )
   }

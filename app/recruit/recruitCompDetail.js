@@ -8,7 +8,7 @@ import StrInput from '../component/StrInput.js';
 import BackTitle from '../component/BackTitle.js';
 import Title from '../component/Title.js';
 import RecruitSearch from './recruitsearch.js';
-import { getDataList, getCheckbind, Getwxtoken, getUserInfo, postProv, postData, postYJData, getDataDetail } from '../DataInterface.js';
+import { getDataList, getCheckbind, Getwxtoken, getUserInfo, postProv, postData, postYJData, getDataDetail,getDataListRe } from '../DataInterface.js';
 import BackT from '../advantagenew/backT.js';
 
 class ReCompDetail extends Component {
@@ -21,32 +21,88 @@ class ReCompDetail extends Component {
         this.relistDetailshow = this.relistDetailshow.bind(this);
         this.reshow = this.reshow.bind(this);
         this.backtogw = this.backtogw.bind(this);
+        this.listShow = this.listShow.bind(this);
+        this.relistallshow = this.relistallshow.bind(this);
+        this.next=this.next.bind(this);
+        this.last=this.last.bind(this);
         this.state = {
             comp: this.props.comp,
             reid:this.props.reid,
-            BinduserName: this.props.BinduserName,//当前用户
-            wxtoken: this.props.wxtoken,
+            // BinduserName: this.props.BinduserName,//当前用户
+            // wxtoken: this.props.wxtoken,
             logo:'',
             compArr:'',
             relists:[],
             relistDetailNum:'',
             showPage:'companyDetail',//companyDetail 公司详情  relistDetail 公司下招聘详情
             recruitmentData:'',
+            pageIndex:1,
+            rowCount:0,
+            allpage:'',
+            thepage:1,
+            
         }
     } 
     componentWillMount() {
-        let userName=this.state.BinduserName;
-        let wxtoken=this.state.wxtoken;
+        // let userName=this.state.BinduserName;
+        // let wxtoken=this.state.wxtoken;
         let comp = this.state.comp;
-        let url = 'api/comps/'+comp +'?userName='+userName+ '&wxtoken='+wxtoken;
+        let pageIndex =this.state.pageIndex;
+        let url = 'api/recruitment/comp/'+comp +'/';
         getDataDetail(url, this.bkFun);
-        let urls = 'api/recruitment/?comp='+this.state.comp +'&rowCount=4&pageIndex=1';
-        getDataList(urls,[] ,this.relistall)
+        let urls = 'api/recruitment/?comp='+this.state.comp +'&rowCount=&pageIndex='+pageIndex;
+        getDataListRe(urls,[] ,this.relistall)
     }
     relistall(data) {
+        if (data.rowCount <= 4) {
+            this.setState({
+                allpage:1,
+                thepage:1,
+            })
+        }else {
+            let num = data.rowCount;
+            let pages = num/4;
+            let allpage = Math.ceil(pages)
+            this.setState({
+                allpage:allpage,
+            })
+        }
+        this.listShow(1);
+        // this.bkFun(data)
+    }
+    listShow(thepages) {
+        let urls = 'api/recruitment/?comp='+this.state.comp +'&rowCount=4&pageIndex='+thepages;
+        getDataListRe(urls,[] ,this.relistallshow)
+    }
+    relistallshow(data) {
         this.setState({
-            relists:data,
+            rowCount:data.rowCount,
+            relists:data.rows,
         })
+    }
+    next() {
+        let allpage = this.state.allpage;
+        let thepage = this.state.thepage;
+        if (thepage < allpage) {
+            let thepages = thepage +1;
+            this.setState({
+                thepage : thepages,
+                pageIndex:thepages,
+            })
+            this.listShow(thepages);
+        }
+    }
+    last(){
+        let allpage = this.state.allpage;
+        let thepage = this.state.thepage;
+        if (thepage >1) {
+            let thepages = thepage -1;
+            this.setState({
+                thepage : thepages,
+                pageIndex:thepages,
+            })
+            this.listShow(thepages);
+        }
     }
     showlists() {
         let data = this.state.relists;
@@ -61,7 +117,7 @@ class ReCompDetail extends Component {
     }
     relistDetail(e) {
         let num = e.target.parentNode.getAttribute('num');
-        console.log(num);
+        // console.log(num);
         this.setState({
             showPage:'relistDetail',
             // relistDetailNum:num,
@@ -71,12 +127,12 @@ class ReCompDetail extends Component {
     }
     relistDetailshow(num) {
         let recruitment =num;
-        console.log(recruitment);
+        // console.log(recruitment);
         let url = 'api/recruitment/'+recruitment+'/';
         getDataDetail(url, this.reshow);
     }
     reshow(data){
-        console.log(data);
+        // console.log(data);
         if (!data.err) {
             let recruitment = data.recruitment;
             this.setState({
@@ -85,11 +141,9 @@ class ReCompDetail extends Component {
         }else {
 
         }
-        
-
     }
     bkFun(data) {
-        // console.log(data);
+        console.log(data);
         if (!data.err) {
             let comp = data.comp;
             let logo = comp.logo;
@@ -101,12 +155,14 @@ class ReCompDetail extends Component {
               })
             }else {
               let logoUrl =  HTTPED + 'images/nlogo.png';
+              console.log(logoUrl);
               this.setState({
                 compArr:comp,
                 logo:logoUrl
               })
             }
         }
+        
     }
     backtogw() {
         this.setState({
@@ -142,6 +198,7 @@ class ReCompDetail extends Component {
                 </p>
             })
         }
+        console.log(this.state.logo);
         return (
             <div>
             {    
@@ -168,11 +225,36 @@ class ReCompDetail extends Component {
                             {
                                 this.showlists()
                             }
+                            {
+                                this.state.rowCount < 2?
+                                <li className="re_lists"></li>:undefined
+                            }
+                            {
+                                this.state.rowCount < 3?
+                                <li className="re_lists"></li>:undefined
+                            }
+                            {
+                                this.state.rowCount < 4?
+                                <li className="re_lists"></li>:undefined
+                            }
                         </ul>
+                        <div className="re_lists_paging">
+                            <span onClick={this.last}>上一页</span>
+                            <span>{this.state.thepage}/{this.state.allpage}</span>
+                            <span onClick={this.next}>下一页</span>
+                        </div>
                     </div> : undefined
                 }
+                {/* {
+                    this.state.compArr.information != null ?
+                    <div>
+                        <div className="re_comp_tips">公司简介</div>
+                        <div className="re_comp_msg">{this.state.compArr.information}</div>
+                    </div>
+                    :undefined
+                } */}
                 <div className="re_comp_tips">公司简介</div>
-                {/* <div className="re_comp_msg">{this.state.compArr}</div> */}
+                <div className="re_comp_msg">{this.state.compArr.information}</div>
                 <div className="re_comp_tips">联系方式</div>
                 <div className="re_comp_phon">电话：{this.state.compArr.phon}</div>
                 <div className="re_comp_tips">公司地址</div>

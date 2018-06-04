@@ -18,16 +18,16 @@ body{max-width:640/@fz;min-width:320/@fz;margin: 0 auto;background: #ccc;height:
 
 .re_input{height:48/@fz;line-height:48/@fz;border:1px solid #cccacb;background:#ebe9ea;font-size:26/@fz;border-radius:6/@fz;padding-left:5/@fz}
 // 招聘页面
-.re_body{background: #fff;}
+.re_body{background: #fff;padding-bottom:60/@fz}
 .r_titele{width:100%;height:60/@fz;line-height:60/@fz;background: #0b91f0;font-size:30/@fz;color:#fff}
 .re_conditions{margin: 46/@fz auto;
     li{height:50/@fz;line-height:50/@fz;margin:0 auto 26/@fz;font-size:26/@fz;
         span{display: inline-block;width:30%}
-        input{height:48/@fz;line-height:48/@fz;border:1px solid #cccacb;background:#ebe9ea;font-size:26/@fz;border-radius:6/@fz;padding-left:5/@fz;width:65%;
+        input{height:48/@fz;line-height:48/@fz;border:1px solid #cccacb;background:#ebe9ea;font-size:26/@fz;border-radius:6/@fz;padding-left:5/@fz;width:65%;color:#333;
            
         }
-        select{height:48/@fz;line-height:48/@fz;border:1px solid #cccacb;background:#ebe9ea;font-size:26/@fz;border-radius:6/@fz;padding-left:5/@fz;width:65%;
-            option{height:48/@fz;line-height:48/@fz;border:1px solid #cccacb;background:#ebe9ea;font-size:22/@fz;width:40%}
+        select{height:48/@fz;line-height:48/@fz;border:1px solid #cccacb;background:#ebe9ea;font-size:26/@fz;border-radius:6/@fz;padding-left:5/@fz;width:65%;color:#333;
+            option{height:48/@fz;line-height:48/@fz;border:1px solid #cccacb;background:#ebe9ea;font-size:22/@fz;width:40%;color:#333;}
         }
     }
 }
@@ -52,8 +52,15 @@ body{max-width:640/@fz;min-width:320/@fz;margin: 0 auto;background: #ccc;height:
 .re_lists_title{display:flex;justify-content: space-between;background:#0b91f0;
     span{height:40/@fz;width:33%;font-size:16/@fz;line-height:40/@fz;color:#fff;text-align: center}
 }
-.re_lists{display:flex;justify-content: space-between;
+.re_lists{display:flex;justify-content: space-between;height:40/@fz;
     span{height:40/@fz;width:33%;font-size:16/@fz;line-height:40/@fz;text-align: center}
+}
+.re_lists_paging{height:40/@fz;display:flex;justify-content: space-between;
+    span{height:40/@fz;width:33%;font-size:16/@fz;line-height:40/@fz;
+        &:nth-child(1){text-align: center}
+        &:nth-child(2){text-align: center}
+        &:nth-child(3){text-align: center;}
+    }
 }
 .re_lists:nth-child(even) {background: #f3f3f3;}
 .re_lists:nth-child(odd) {background: #e6e6e6;}
@@ -81,12 +88,12 @@ body{max-width:640/@fz;min-width:320/@fz;margin: 0 auto;background: #ccc;height:
 .re_position_comp{height:30/@fz;line-height: 30/@fz;font-size:16/@fz;padding-left:20/@fz}
 .re_position_msgs{padding-left:46/@fz;
     li{
-        p{line-height:32/@fz;font-size: 16/@fz}
+        p{line-height:32/@fz;font-size: 16/@fz;padding-right: 30/@fz;}
     }
 }
 
 // 职位选择
-.hiringCH{position: fixed;top: 52/@fz;left:0;right:0;bottom:0;background:#fff;
+.hiringCH{position: fixed;top: 52/@fz;left:0;right:0;bottom:0;background:#fff;padding-bottom:60/@fz;
     .r_hiring_lists{margin: 0 auto;display: flex;flex-wrap: wrap;justify-content: space-between;
         li{width:33%;padding:33%/2 0;position: relative;
             div{width:60%;height:60%;position: absolute;top:50%;left:50%;margin:-40% 0 0 -30%;z-index:1000;
@@ -101,3 +108,7 @@ body{max-width:640/@fz;min-width:320/@fz;margin: 0 auto;background: #ccc;height:
 }
 
 .re_search{background: #0b91f0;}
+
+.city_lists{
+    li{float: left;border:1px solid #333;border-radius:4/@fz;text-align: center;margin:10/@fz 2%;background: #e6e6e6;padding:10/@fz;font-size:14/@fz;line-height: 16/@fz;}
+}

@@ -16,13 +16,14 @@ class Recruit extends Component {
   constructor(props) {
     super(props);
     this.toSearch = this.toSearch.bind(this);
-    this.getBuserName = this.getBuserName.bind(this);
+    // this.getBuserName = this.getBuserName.bind(this);
     this.backfun = this.backfun.bind(this);
     this.backReLists = this.backReLists.bind(this);//招聘列表页面的数据
-    // this.toCompDetail = this.toCompDetail.bind(this);//去公司详情页面
+    this.pageD = this.pageD.bind(this);
     this.compDetail = this.compDetail.bind(this);
     this.backto = this.backto.bind(this);
-    // this.handleClick=this.handleClick.bind(this);
+    
+    this.searchs=this.searchs.bind(this);
     
     this.state = {
       user: 0,//用户id
@@ -34,35 +35,40 @@ class Recruit extends Component {
       showRelists:true,//是否显示 一开始进入时的 五个列表
       recomp:"",//招聘的公司id
       reid:'',//招聘信息的id
+      cityID:'',
+      hiringName:"",
+      salary:'',
     }
   }
   componentWillMount() {
-    let wxtoken = Getwxtoken();  //获取微信ID
-    this.setState({
-      wxtoken: wxtoken,
-    });
-    getCheckbind(wxtoken, this.getBuserName);
+    // let wxtoken = Getwxtoken();  //获取微信ID
+    // this.setState({
+    //   wxtoken: wxtoken,
+    // });
+    // getCheckbind(wxtoken, this.getBuserName);
+    this.pageD()
   }
-  getBuserName(value) {
-    if (!value.err) {
-      let userJson = value.user;
-      this.setState({
-        BinduserName: userJson.userAcco,
-        user: userJson.user,
-        comp: userJson.comp,
-      });
-    }
-    let BinduserName = this.state.BinduserName;
-    let wxtoken = this.state.wxtoken;
-    let user = this.state.user;
+  // getBuserName(value) {
+  //   if (!value.err) {
+  //     let userJson = value.user;
+  //     this.setState({
+  //       BinduserName: userJson.userAcco,
+  //       user: userJson.user,
+  //       comp: userJson.comp,
+  //     });
+  //   }
+  // }
+  pageD(){
     let url = 'api/recruitment/?hiringName=&salary=&city=&rowCount=5&pageIndex=1';
     getDataList(url, [], this.backfun)
   }
-
+  
   backfun(data) {
     console.log(data);
     this.setState({
       recruitmentLists: data,
+      Pagestatus: 'recruit',
+      showRelists:true,
     })
   }
 
@@ -76,7 +82,7 @@ class Recruit extends Component {
     let value = this.state.recruitmentLists;
     let _this = this;
     return value.map(s => {
-      return <RecruitListAll key={s.recruitment} thevalue={s} toDetail={_this.toCompDetail.bind(s, s.recruitment, s.comp,_this)} BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken}></RecruitListAll>
+      return <RecruitListAll key={s.recruitment} thevalue={s} toDetail={_this.toCompDetail.bind(s, s.recruitment, s.comp,_this)} ></RecruitListAll>
       // 传递 招聘id 和 公司id
     });
   }
@@ -90,13 +96,20 @@ class Recruit extends Component {
   }
 
   compDetail() {
-    return <ReCompDetail backto={this.backto} comp ={this.state.recomp} BinduserName={this.state.BinduserName} wxtoken={this.state.wxtoken} reid={this.state.reid} ></ReCompDetail>
+    return <ReCompDetail backto={this.backto} comp ={this.state.recomp}  reid={this.state.reid} ></ReCompDetail>
   }
   backto() {
     this.setState({
       Pagestatus: 'recruit',
       showRelists:true,
     })
+  }
+  searchs(a,b,c) {
+    console.log(a,b,c);
+    if (a != '' &&b!= '' && c !='') {
+      let url = 'api/recruitment/?hiringName='+a+'&salary='+b+'&city'+c+'=&rowCount=1&pageIndex=1';
+      getDataList(url, [], this.backfun)
+    }
   }
   // handleClick(e) {
   //   let hiringName= e.target.getAttribute('name');
@@ -121,7 +134,7 @@ class Recruit extends Component {
         }
         {
           this.state.Pagestatus == 'recruitSearch' ?
-            <RecruitSearch backto={this.backto} ></RecruitSearch> : undefined
+            <RecruitSearch backto={this.backto} searchs={this.searchs} ></RecruitSearch> : undefined
         }
         { this.state.showRelists ?
           this.backReLists():undefined

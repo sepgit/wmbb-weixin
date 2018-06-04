@@ -16,23 +16,23 @@ class RecruitListAll extends Component {
     this.bkFun = this.bkFun.bind(this);
     this.state = {
         value:this.props.thevalue,
-        BinduserName: this.props.BinduserName, //当前用户
-        wxtoken: this.props.wxtoken,
+        // BinduserName: this.props.BinduserName, //当前用户
+        // wxtoken: this.props.wxtoken,
         logo :''
     }
   }
   componentWillMount() {
-    let userName=this.state.BinduserName;
-    let wxtoken=this.state.wxtoken;
+    // let userName=this.state.BinduserName;
+    // let wxtoken=this.state.wxtoken;
     let comp = this.state.value.comp;
-    let url = 'api/comps/'+comp +'?userName='+userName+ '&wxtoken='+wxtoken;
-    getDataDetail(url, this.bkFun);
+    // let url = 'api/comps/'+comp +'?userName='+userName+ '&wxtoken='+wxtoken;
+    // getDataDetail(url, this.bkFun);
+    this.bkFun(this.state.value)
   }
   bkFun (data) {
     // console.log(data);
-    if (!data.err) {
-      let comp = data.comp;
-      let logo = comp.logo;
+      
+      let logo = data.logo;
       if (logo != undefined) {
         let logoUrl =  HTTPED +logo;
         this.setState({
@@ -44,11 +44,14 @@ class RecruitListAll extends Component {
           logo:logoUrl
         })
       }
-    }
+    
   }
   render() {
+    console.log(this.state.value);
     let s = this.state.value.datetime
-    let x = s.substring(0,s.indexOf('T'))
+    let x = s.substring(0,s.indexOf('T'));
+    console.log(this.state.logo);
+    
     return (
       <div className="re_lists_all clearfix" onClick={this.props.toDetail}>
         <div className="re_compIcon"><img src={this.state.logo} alt="logo"/></div>
