@@ -30,7 +30,7 @@ class ReCompDetail extends Component {
             reid:this.props.reid,
             // BinduserName: this.props.BinduserName,//当前用户
             // wxtoken: this.props.wxtoken,
-            logo:'',
+            // logo:'',
             compArr:'',
             relists:[],
             relistDetailNum:'',
@@ -40,7 +40,7 @@ class ReCompDetail extends Component {
             rowCount:0,
             allpage:'',
             thepage:1,
-            
+            recompDetail:[]
         }
     } 
     componentWillMount() {
@@ -54,10 +54,13 @@ class ReCompDetail extends Component {
         getDataListRe(urls,[] ,this.relistall)
     }
     relistall(data) {
+        console.log(data);
+        let recompDetail=data.rows[0]
         if (data.rowCount <= 4) {
             this.setState({
                 allpage:1,
                 thepage:1,
+                recompDetail:recompDetail
             })
         }else {
             let num = data.rowCount;
@@ -65,6 +68,7 @@ class ReCompDetail extends Component {
             let allpage = Math.ceil(pages)
             this.setState({
                 allpage:allpage,
+                recompDetail:recompDetail
             })
         }
         this.listShow(1);
@@ -146,21 +150,11 @@ class ReCompDetail extends Component {
         console.log(data);
         if (!data.err) {
             let comp = data.comp;
-            let logo = comp.logo;
-            if (logo != undefined) {
-              let logoUrl =  HTTPED +logo;
               this.setState({
                 compArr:comp,
-                logo:logoUrl
-              })
-            }else {
-              let logoUrl =  HTTPED + 'images/nlogo.png';
-              console.log(logoUrl);
-              this.setState({
-                compArr:comp,
-                logo:logoUrl
-              })
-            }
+            })
+        }else{
+
         }
         
     }
@@ -198,7 +192,7 @@ class ReCompDetail extends Component {
                 </p>
             })
         }
-        console.log(this.state.logo);
+        // console.log(this.state.logo);
         return (
             <div>
             {    
@@ -209,7 +203,7 @@ class ReCompDetail extends Component {
                 <div className="r_titele text_cen">公司详情</div>
                 <div className="re_comp_compname">
                     <div className="bg"></div>
-                    <div className="re_comp_logo"><img src={this.state.logo} alt="logo"/></div>
+                    {/* <div className="re_comp_logo"><img src={this.state.logo} alt="logo"/></div> */}
                     <div className="re_comp_name">{this.state.compArr.compName}</div>
                 </div>
                 <div className="re_comp_tips">招聘信息</div>
@@ -256,7 +250,9 @@ class ReCompDetail extends Component {
                 <div className="re_comp_tips">公司简介</div>
                 <div className="re_comp_msg">{this.state.compArr.information}</div>
                 <div className="re_comp_tips">联系方式</div>
-                <div className="re_comp_phon">电话：{this.state.compArr.phon}</div>
+                <div className="re_comp_phon">{this.state.compArr.retelno}</div>
+                <div className="re_comp_tips">邮箱</div>
+                <div className="re_comp_phon">{this.state.compArr.reEmail}</div>
                 <div className="re_comp_tips">公司地址</div>
                 <div className="re_comp_msg">{this.state.compArr.addr}</div>
             </div>:undefined

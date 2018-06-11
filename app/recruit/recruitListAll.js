@@ -47,11 +47,10 @@ class RecruitListAll extends Component {
     
   }
   render() {
-    console.log(this.state.value);
-    let s = this.state.value.datetime
+    // console.log(this.state.value);
+    let s = this.state.value.createdatetime
     let x = s.substring(0,s.indexOf('T'));
-    console.log(this.state.logo);
-    
+    // console.log(this.state.logo);
     return (
       <div className="re_lists_all clearfix" onClick={this.props.toDetail}>
         <div className="re_compIcon"><img src={this.state.logo} alt="logo"/></div>
